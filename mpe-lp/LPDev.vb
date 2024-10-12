@@ -8,16 +8,23 @@ Public Class LPDev
 
     Public Event ReceivedJob(sender As Object, job As List(Of String))  ' Raised when job is completed.
     Public Event ConnectionError(errorArg As Exception) ' Raised when connection is NOT established.
-    Public Event DataIn(lineIn As String) ' Raised when a line of data is received, in case the main
-    ' program would like to handle it.
     ' Note, for some reason we're not told if the connection disconnects, so that's
     ' just wierd, so this event is raised ONLY if it can't initially connect.
+    Public Event DataIn(lineIn As String) ' Raised when a line of data is received, in case the main
+    ' program would like to handle it.
+
+    Private BannerLinesIn As Integer = 0 ' SIMH Sends junk and a banner.  Total 4 lines.
+    Private OkToReceive As Boolean = False
+
     Private myHost As String = ""
     Private myport As Integer = 1043
     Private myauto As Boolean = False
 
     Private client As New TcpClient
     Private WithEvents clientTimer As New Timer(100)
+
+    Private CurrentJobFlag As String = ""
+    Private CurrentFlagLines As Integer = 0
     Public Sub New(host As String, port As Integer, auto As Boolean)
         If host = "init" Then Exit Sub
         myHost = host
@@ -65,6 +72,13 @@ Public Class LPDev
                 MyString = MyString & thisChar
                 If thisChar = vbLf Then
                     RaiseEvent DataIn(MyString)
+                    If Not OkToReceive Then
+                        BannerLinesIn = BannerLinesIn + 1
+                        If BannerLinesIn >= 4 Then
+                            OkToReceive = True
+                            RaiseEvent DataIn("***** RECEIVING JOBS *****")
+                        End If
+                    End If
                     Return MyString
                 End If
             End While
