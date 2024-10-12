@@ -21,7 +21,7 @@ Public Class LPDev
     Private myauto As Boolean = False
 
     Private client As New TcpClient
-    Private WithEvents clientTimer As New Timer(100)
+    Private WithEvents clientTimer As New Timer(2000)
 
     Private CurrentJobFlag As String = ""
     Private CurrentFlagLines As Integer = 0

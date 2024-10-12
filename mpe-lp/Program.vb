@@ -1,6 +1,7 @@
 Imports System
 Imports System.Net.Http
 Imports System.Threading
+Imports PdfSharp.Charting
 
 Module Program
     ' *** MPE-LP: 2024, ScottJ, westdalefarmer@gmail.com
@@ -43,6 +44,7 @@ Module Program
         lp = New LPDev(cfg.Hostname, cfg.Port, cfg.AutoConnect)
         AddHandler lp.ConnectionError, AddressOf BadConnect
         AddHandler lp.DataIn, AddressOf DataIn
+        AddHandler lp.ReceivedJob, AddressOf JobReady
         Console.WriteLine("----- Attempting to connect to the remote host.")
         lp.Connect()
         Console.WriteLine("Connected.")
@@ -57,6 +59,14 @@ Module Program
         Loop
     End Sub
 
+    Public Sub JobReady(sender As Object, job As List(Of String))
+        Dim oldColor As ConsoleColor = Console.ForegroundColor
+        Console.ForegroundColor = ConsoleColor.Green
+        For Each l As String In job
+            Console.Write(l)
+        Next
+        Console.ForegroundColor = oldColor
+    End Sub
     Public Sub DataIn(txt As String)
         txt = txt.Replace(vbCr, "<CR>")
         txt = txt.Replace(vbLf, "<LF>")
