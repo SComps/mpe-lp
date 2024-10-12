@@ -87,7 +87,7 @@ Module Program
         Dim gfx As XGraphics = XGraphics.FromPdfPage(page)
         ' Create a font
 
-        Dim font As New XFont("Helvetica", 8, XFontStyleEx.Regular)
+        Dim font As New XFont("Courier", 8, XFontStyleEx.Regular)
         Dim bkgrd As XImage = XImage.FromFile("dummy.jpg")
         gfx.DrawImage(bkgrd, 0, 0)
         ' Set initial coordinates for text
