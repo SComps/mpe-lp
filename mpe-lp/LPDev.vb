@@ -96,8 +96,10 @@ Public Class LPDev
         ' if the checks happen to rapidly.
         clientTimer.Enabled = False
         Dim myJob As List(Of String) = GetOutput()
-        If myJob.Count > 0 Then
+        If myJob.Count > 4 Then
             ' A job has been printed.  It might be ours, it might not.
+            ' If the job is 4 lines or so, it's probably the simh banner
+            ' so ignore it, and throw it away.
             RaiseEvent ReceivedJob(Me, myJob)
         End If
         clientTimer.Enabled = True

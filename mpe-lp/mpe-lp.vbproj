@@ -10,4 +10,10 @@
     <PackageReference Include="PDFsharp" Version="6.2.0-preview-1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="dummy.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
